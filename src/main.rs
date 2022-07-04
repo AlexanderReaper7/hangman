@@ -4,7 +4,7 @@ extern crate graphics;
 extern crate opengl_graphics;
 extern crate piston;
 mod app;
-
+mod game;
 use app::*;
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::OpenGL;

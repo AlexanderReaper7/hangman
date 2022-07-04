@@ -3,16 +3,24 @@ extern crate graphics;
 extern crate opengl_graphics;
 extern crate piston;
 
+
+use crate::game::*;
 use opengl_graphics::GlyphCache;
 use opengl_graphics::{GlGraphics, OpenGL, TextureSettings};
 use piston::input::{RenderArgs, UpdateArgs};
 use std::time::Instant;
 
 pub struct App<'a> {
-    gl: GlGraphics,                      // OpenGL drawing backend.
-    pub rotation: f64,                   // Rotation for the square.
-    pub previous_frame_instant: Instant, // Time between frames.
-    glyph_cache: GlyphCache<'a>,         // Cache for the font.
+    /// OpenGL drawing backend.
+    gl: GlGraphics,
+    /// Rotation for the square.
+    pub rotation: f64,
+    /// Time between frames.
+    pub previous_frame_instant: Instant, 
+    /// Cache for the font.
+    glyph_cache: GlyphCache<'a>,
+
+    pub game: Game,
 }
 impl Default for App<'_> {
     fn default() -> App<'static> {
@@ -22,6 +30,7 @@ impl Default for App<'_> {
             previous_frame_instant: Instant::now(),
             glyph_cache: GlyphCache::new("assets/FiraSans-Regular.ttf", (), TextureSettings::new())
                 .unwrap(),
+            game: Game::new("hello".to_string()).unwrap(),
         }
     }
 }
@@ -31,6 +40,7 @@ impl App<'_> {
 
         const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 1.0];
         const RED: [f32; 4] = [1.0, 0.0, 0.0, 1.0];
+        const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
 
         let square = rectangle::square(0.0, 0.0, 50.0);
         let rotation = self.rotation;

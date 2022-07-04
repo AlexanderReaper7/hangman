@@ -5,7 +5,7 @@
 ### 1 - "application framework"
 - [x] boilerplate for piston framework
 ### 2 - "the basics"
-- [ ] the game data struct
+- [x] the game data struct
 - [ ] character guessing
 - [ ] word selection
 - [ ] win/lose conditions
@@ -33,3 +33,4 @@
 - [ ] AI guesser
 - [ ] AI word picker by customizable difficulty level
 - [ ] compilable to WASM
+- [ ] CLI version
