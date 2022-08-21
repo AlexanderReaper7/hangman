@@ -1,7 +1,9 @@
 [//]: # (Add a header image here of the game)
 # [Hangman game](https://en.wikipedia.org/wiki/Hangman_(game)) made in rust
 
-## Todo list
+<details>
+<summary>Todo list</summary>
+
 ### 1 - "application framework"
 - [x] boilerplate for piston framework
 ### 2 - "the basics"
@@ -34,3 +36,5 @@
 - [ ] AI word picker by customizable difficulty level
 - [ ] compilable to WASM
 - [ ] CLI version
+
+</details>
