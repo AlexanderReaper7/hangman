@@ -1,8 +1,8 @@
-const ENGLISH_ALPHABET: &str = "abcdefghijklmnopqrstuvwxyz";
+pub const ENGLISH_ALPHABET: &str = "abcdefghijklmnopqrstuvwxyz";
 enum HangmanDrawingElements {
     Base = 1,
     VerticalBeam = 2,
-    Horizontalbeam = 3,
+    HorizontalBeam = 3,
     Rope = 4,
     Head = 5,
     Torso = 6,
@@ -24,7 +24,7 @@ impl DifficultyLevel {
             vec![
                 HangmanDrawingElements::Base,
                 HangmanDrawingElements::VerticalBeam,
-                HangmanDrawingElements::Horizontalbeam,
+                HangmanDrawingElements::HorizontalBeam,
                 HangmanDrawingElements::SupportBeam,
                 HangmanDrawingElements::Rope,
                 HangmanDrawingElements::Head,
@@ -45,7 +45,7 @@ impl DifficultyLevel {
             vec![
                 HangmanDrawingElements::Base,
                 HangmanDrawingElements::VerticalBeam,
-                HangmanDrawingElements::Horizontalbeam,
+                HangmanDrawingElements::HorizontalBeam,
                 HangmanDrawingElements::SupportBeam,
                 HangmanDrawingElements::Rope,
                 HangmanDrawingElements::Head,
@@ -66,7 +66,7 @@ impl DifficultyLevel {
             vec![
                 HangmanDrawingElements::Base,
                 HangmanDrawingElements::VerticalBeam,
-                HangmanDrawingElements::Horizontalbeam,
+                HangmanDrawingElements::HorizontalBeam,
                 HangmanDrawingElements::Rope,
                 HangmanDrawingElements::Head,
                 HangmanDrawingElements::Torso,
@@ -82,7 +82,7 @@ impl DifficultyLevel {
         DifficultyLevel(
             vec![
                 HangmanDrawingElements::VerticalBeam,
-                HangmanDrawingElements::Horizontalbeam,
+                HangmanDrawingElements::HorizontalBeam,
                 HangmanDrawingElements::Rope,
                 HangmanDrawingElements::Head,
                 HangmanDrawingElements::Torso,
@@ -97,9 +97,9 @@ impl DifficultyLevel {
 }
 
 /// (the character, has it been guessed?)
-pub struct GuessableChar(char, bool);
+pub struct GuessableChar(pub char, pub bool);
 impl GuessableChar {
-    pub fn new(character_set: &str) -> Vec<GuessableChar> {
+    pub fn new_set(character_set: &str) -> Vec<GuessableChar> {
         character_set
             .chars()
             .map(|c| GuessableChar(c, false))
@@ -132,33 +132,42 @@ impl Game {
         }
         // TODO: check if word is in the dictionary
         Ok(Game {
-            guessable_characters: GuessableChar::new(ENGLISH_ALPHABET),
+            guessable_characters: GuessableChar::new_set(ENGLISH_ALPHABET),
             guess_count: 0,
             in_progress_word: "_".repeat((&word).len()),
             word,
-            difficulty: DifficultyLevel::get_normal(),
+            difficulty: DifficultyLevel::get_easiest(),
         })
     }
     /// checks if the character is in the word and fill it in, returns true if it was in the word
-    pub fn guess(&mut self, char: GuessableChar) -> bool {
+    pub fn guess(&mut self, char: char) -> bool {
         let mut out = false;
         // check if char is in the word
-        if self.word.contains(char.0) {
+        if self.word.contains(char) {
             // replace all instances of the char in the in_progress_word
             for (i, c) in self.word.chars().enumerate() {
-                if c == char.0 {
+                if c == char {
                     self.in_progress_word
-                        .replace_range(i..i + 1, char.0.to_string().as_str());
+                        .replace_range(i..i + 1, char.to_string().as_str());
                     out = true;
                 }
             }
         }
+        // update the guessable character
+        self.guessable_characters
+            .iter_mut()
+            .find(|gc| gc.0 == char)
+            .map(|gc| gc.1 = true);
         self.guess_count += 1;
         out
     }
     /// like guess but does not guess if the character has already been guessed
-    pub fn safe_guess(&mut self, char: GuessableChar) -> Option<bool> {
-        if !char.1 {
+    pub fn safe_guess(&mut self, char: char) -> Option<bool> {
+        let guessed = self.guessable_characters
+            .iter()
+            .find(|gc| gc.0 == char)
+            .map(|gc| gc.1).unwrap();
+        if guessed {
             return None;
         }
         Some(self.guess(char))
@@ -166,9 +175,9 @@ impl Game {
     /// returns Some if game is over, true on win and false on loss, None if game is not over
     pub fn get_game_state(&self) -> Option<bool> {
         if self.guess_count >= self.difficulty.0.len() as i32 {
-            return Some(true);
-        } else if self.in_progress_word == self.word {
             return Some(false);
+        } else if self.in_progress_word == self.word {
+            return Some(true);
         }
         None
     }

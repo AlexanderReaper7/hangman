@@ -6,17 +6,17 @@
 - [x] boilerplate for piston framework
 ### 2 - "the basics"
 - [x] the game data struct
-- [ ] character guessing
-- [ ] word selection
-- [ ] win/lose conditions
+- [x] character guessing
+- [x] word selection
+- [x] win/lose conditions
 ### 3 - "basic rendering of word and characters"
 - [ ] auto resize to full screen size
-- [ ] render dashes for the word to be guessed
+- [x] render dashes for the word to be guessed
 - [ ] render valid guessable characters
 - [ ] grey out guessed characters
 ### 4 - "basic interactivity"
 - [ ] input by clicking on characters on screen
-- [ ] input by keyboard
+- [x] input by keyboard
 ### 5 - "sound"
 - [ ] sound effects
 - [ ] music?
@@ -27,7 +27,7 @@
 - [ ] fade to grey guessed characters
 ### 7 - "additional languages"
 - [ ] additional langs with latin only chars
-- [ ] additianal langs with any chars
+- [ ] additional langs with any chars
 ### ∞ 
 - [ ] P2P networking multiplayer
 - [ ] AI guesser

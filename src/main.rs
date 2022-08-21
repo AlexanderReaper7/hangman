@@ -11,13 +11,14 @@ use opengl_graphics::OpenGL;
 use piston::event_loop::{EventSettings, Events};
 use piston::input::{RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
-use piston::EventLoop;
+use piston::{EventLoop, ButtonEvent, ResizeEvent};
+
 
 fn main() {
     let opengl = OpenGL::V3_2;
 
     // Create an Glutin window.
-    let mut window: Window = WindowSettings::new("Hangman", [1920, 1080])
+    let mut window: Window = WindowSettings::new("Hangman", [WINDOW_DOTS, WINDOW_DOTS])
         .graphics_api(opengl)
         .samples(8)
         .exit_on_esc(true)
@@ -30,12 +31,10 @@ fn main() {
 
     let mut events = Events::new(EventSettings::new().max_fps(120));
     while let Some(e) = events.next(&mut window) {
-        if let Some(args) = e.render_args() {
-            app.render(&args);
-        }
-
-        if let Some(args) = e.update_args() {
-            app.update(&args);
-        }
+        e.render(|args| app.render(&args));
+        e.update(|args| app.update(&args));
+        e.resize(|args| app.resize(&args));
+        e.button(|args| app.button(&args));
+        piston::input::mouse::MouseCursorEvent::mouse_cursor(&e, |args| app.update_mouse_cursor(args));
     }
 }
