@@ -12,8 +12,8 @@
 ### 3 - "basic rendering of word and characters"
 - [ ] auto resize to full screen size
 - [x] render dashes for the word to be guessed
-- [ ] render valid guessable characters
-- [ ] grey out guessed characters
+- [x] render valid guessable characters
+- [x] grey out guessed characters
 ### 4 - "basic interactivity"
 - [ ] input by clicking on characters on screen
 - [x] input by keyboard
