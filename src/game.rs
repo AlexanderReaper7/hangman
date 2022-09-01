@@ -1,5 +1,5 @@
-pub const ENGLISH_ALPHABET: &str = "abcdefghijklmnopqrstuvwxyz";
-enum HangmanDrawingElements {
+pub const ENGLISH_ALPHABET: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+pub enum HangmanDrawingElements {
     Base = 1,
     VerticalBeam = 2,
     HorizontalBeam = 3,
@@ -17,7 +17,7 @@ enum HangmanDrawingElements {
     Mouth = 14,
 }
 /// the drawing element order and the different difficulty versions
-pub struct DifficultyLevel(Vec<HangmanDrawingElements>, &'static str);
+pub struct DifficultyLevel(pub Vec<HangmanDrawingElements>, &'static str);
 impl DifficultyLevel {
     pub fn get_easiest() -> DifficultyLevel {
         DifficultyLevel(
@@ -120,11 +120,11 @@ pub struct Game {
 }
 impl Game {
     /// create a new game from input word
-    pub fn new(mut word: String) -> Result<Game, ()> {
+    pub fn new(mut word: String, difficulty: DifficultyLevel) -> Result<Game, ()> {
         if word.len() < 1 {
             return Err(());
         }
-        word = word.to_lowercase();
+        word = word.to_uppercase();
         for c in word.chars() {
             if !ENGLISH_ALPHABET.contains(c) {
                 return Err(());
@@ -136,11 +136,20 @@ impl Game {
             guess_count: 0,
             in_progress_word: "_".repeat((&word).len()),
             word,
-            difficulty: DifficultyLevel::get_easiest(),
+            difficulty,
         })
     }
     /// checks if the character is in the word and fill it in, returns true if it was in the word
-    pub fn guess(&mut self, char: char) -> bool {
+    pub fn guess(&mut self, char: char) -> Option<bool> {
+        // find the character in the list of guessable characters
+        let guessed = self.guessable_characters
+        .iter()
+        .find(|gc| gc.0 == char)
+        .map(|gc| gc).unwrap();
+        // if the character has already been guessed, return None
+        if guessed.1 {
+            return None;
+        }
         let mut out = false;
         // check if char is in the word
         if self.word.contains(char) {
@@ -158,19 +167,11 @@ impl Game {
             .iter_mut()
             .find(|gc| gc.0 == char)
             .map(|gc| gc.1 = true);
-        self.guess_count += 1;
-        out
-    }
-    /// like guess but does not guess if the character has already been guessed
-    pub fn safe_guess(&mut self, char: char) -> Option<bool> {
-        let guessed = self.guessable_characters
-            .iter()
-            .find(|gc| gc.0 == char)
-            .map(|gc| gc.1).unwrap();
-        if guessed {
-            return None;
+        // increment the guess count if the character was not in the word
+        if !out {
+            self.guess_count += 1;
         }
-        Some(self.guess(char))
+        Some(out)
     }
     /// returns Some if game is over, true on win and false on loss, None if game is not over
     pub fn get_game_state(&self) -> Option<bool> {
@@ -180,5 +181,10 @@ impl Game {
             return Some(true);
         }
         None
+    }
+}
+impl Default for Game {
+    fn default() -> Self {
+        Self::new("hangman".to_string(), DifficultyLevel::get_easiest()).unwrap()
     }
 }

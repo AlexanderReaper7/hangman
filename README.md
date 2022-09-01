@@ -1,7 +1,7 @@
 [//]: # (Add a header image here of the game)
 # [Hangman game](https://en.wikipedia.org/wiki/Hangman_(game)) made in rust
 
-<details>
+<details open>
 <summary>Todo list</summary>
 
 ### 1 - "application framework"
@@ -14,6 +14,7 @@
 ### 3 - "basic rendering of word and characters"
 - [ ] auto resize to full screen size
 - [x] render dashes for the word to be guessed
+- [x] render hang man
 - [x] render valid guessable characters
 - [x] grey out guessed characters
 ### 4 - "basic interactivity"
@@ -23,7 +24,7 @@
 - [ ] sound effects
 - [ ] music?
 ### 6 - "animation"
-- [ ] swaying animation on hanging man
+- [x] swaying animation on hanging man
 - [ ] pop-in/draw-in animation on hangman
 - [ ] animation on correct characters on word
 - [ ] fade to grey guessed characters
