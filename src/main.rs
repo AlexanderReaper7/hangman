@@ -9,6 +9,7 @@ use app::*;
 use glutin_window::GlutinWindow as Window;
 use opengl_graphics::OpenGL;
 use piston::event_loop::{EventSettings, Events};
+use piston::input::mouse::MouseCursorEvent;
 use piston::input::{RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
 use piston::{EventLoop, ButtonEvent, ResizeEvent};
@@ -35,6 +36,6 @@ fn main() {
         e.update(|args| app.update(&args));
         e.resize(|args| app.resize(&args));
         e.button(|args| app.button(&args));
-        piston::input::mouse::MouseCursorEvent::mouse_cursor(&e, |args| app.update_mouse_cursor(args));
+        MouseCursorEvent::mouse_cursor(&e, |args| app.update_mouse_cursor(args));
     }
 }

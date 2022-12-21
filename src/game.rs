@@ -16,26 +16,27 @@ pub enum HangmanDrawingElements {
     RightEye = 13,
     Mouth = 14,
 }
+use HangmanDrawingElements::*;
 /// the drawing element order and the different difficulty versions
 pub struct DifficultyLevel(pub Vec<HangmanDrawingElements>, &'static str);
 impl DifficultyLevel {
     pub fn get_easiest() -> DifficultyLevel {
         DifficultyLevel(
             vec![
-                HangmanDrawingElements::Base,
-                HangmanDrawingElements::VerticalBeam,
-                HangmanDrawingElements::HorizontalBeam,
-                HangmanDrawingElements::SupportBeam,
-                HangmanDrawingElements::Rope,
-                HangmanDrawingElements::Head,
-                HangmanDrawingElements::Torso,
-                HangmanDrawingElements::LeftArm,
-                HangmanDrawingElements::RightArm,
-                HangmanDrawingElements::LeftLeg,
-                HangmanDrawingElements::RightLeg,
-                HangmanDrawingElements::LeftEye,
-                HangmanDrawingElements::RightEye,
-                HangmanDrawingElements::Mouth,
+                Base,
+                VerticalBeam,
+                HorizontalBeam,
+                SupportBeam,
+                Rope,
+                Head,
+                Torso,
+                LeftArm,
+                RightArm,
+                LeftLeg,
+                RightLeg,
+                LeftEye,
+                RightEye,
+                Mouth,
             ],
             "Easiest",
         )
@@ -43,20 +44,20 @@ impl DifficultyLevel {
     pub fn get_normal() -> DifficultyLevel {
         DifficultyLevel(
             vec![
-                HangmanDrawingElements::Base,
-                HangmanDrawingElements::VerticalBeam,
-                HangmanDrawingElements::HorizontalBeam,
-                HangmanDrawingElements::SupportBeam,
-                HangmanDrawingElements::Rope,
-                HangmanDrawingElements::Head,
-                HangmanDrawingElements::Torso,
-                HangmanDrawingElements::LeftArm,
-                HangmanDrawingElements::RightArm,
-                HangmanDrawingElements::LeftLeg,
-                HangmanDrawingElements::RightLeg,
-                HangmanDrawingElements::LeftEye,
-                HangmanDrawingElements::RightEye,
-                HangmanDrawingElements::Mouth,
+                Base,
+                VerticalBeam,
+                HorizontalBeam,
+                SupportBeam,
+                Rope,
+                Head,
+                Torso,
+                LeftArm,
+                RightArm,
+                LeftLeg,
+                RightLeg,
+                LeftEye,
+                RightEye,
+                Mouth,
             ],
             "Normal",
         )
@@ -64,16 +65,16 @@ impl DifficultyLevel {
     pub fn get_hard() -> DifficultyLevel {
         DifficultyLevel(
             vec![
-                HangmanDrawingElements::Base,
-                HangmanDrawingElements::VerticalBeam,
-                HangmanDrawingElements::HorizontalBeam,
-                HangmanDrawingElements::Rope,
-                HangmanDrawingElements::Head,
-                HangmanDrawingElements::Torso,
-                HangmanDrawingElements::LeftArm,
-                HangmanDrawingElements::RightArm,
-                HangmanDrawingElements::LeftLeg,
-                HangmanDrawingElements::RightLeg,
+                Base,
+                VerticalBeam,
+                HorizontalBeam,
+                Rope,
+                Head,
+                Torso,
+                LeftArm,
+                RightArm,
+                LeftLeg,
+                RightLeg,
             ],
             "Hard",
         )
@@ -81,15 +82,15 @@ impl DifficultyLevel {
     pub fn get_hardest() -> DifficultyLevel {
         DifficultyLevel(
             vec![
-                HangmanDrawingElements::VerticalBeam,
-                HangmanDrawingElements::HorizontalBeam,
-                HangmanDrawingElements::Rope,
-                HangmanDrawingElements::Head,
-                HangmanDrawingElements::Torso,
-                HangmanDrawingElements::LeftArm,
-                HangmanDrawingElements::RightArm,
-                HangmanDrawingElements::LeftLeg,
-                HangmanDrawingElements::RightLeg,
+                VerticalBeam,
+                HorizontalBeam,
+                Rope,
+                Head,
+                Torso,
+                LeftArm,
+                RightArm,
+                LeftLeg,
+                RightLeg,
             ],
             "Hardest",
         )
