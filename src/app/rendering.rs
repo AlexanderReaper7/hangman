@@ -1,8 +1,6 @@
 use std::error::Error;
 use std::time;
-
 use graphics::*;
-use opengl_graphics::GlGraphics;
 
 use super::colors::*;
 use super::App;
@@ -53,11 +51,13 @@ pub fn hangman(
             .trans(97.0 * app.scale, -150.0 * app.scale)
             .rot_deg(20.0 * rotation_factor)
             .scale(app.scale, app.scale);
-        for i in 0..app.game.guess_count {
-            if i >= app.game.difficulty.0.len() as i32 {
-                break;
-            }
-            let elem = &app.game.difficulty.0[i as usize];
+        let draw_count = if app.state == AppState::Selecting || app.game.guess_count >= app.game.difficulty.0.len() as i32 {
+            app.game.difficulty.0.len()
+        } else {
+            app.game.guess_count as usize
+        };
+        for i in 0..draw_count {
+            let elem = &app.game.difficulty.0[i];
             use super::HangmanDrawingElements::*;
             match elem {
                 Base => line(
@@ -219,3 +219,7 @@ pub fn in_progress_word(
     )
 }
 
+/// draws the instructions for how to select a word and difficulty
+pub fn instructions() {
+    todo!()
+}

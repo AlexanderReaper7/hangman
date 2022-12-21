@@ -37,5 +37,6 @@
 - [ ] AI word picker by customizable difficulty level
 - [ ] compilable to WASM
 - [ ] CLI version
+- [x] Word selection checking in dictionary
 
 </details>

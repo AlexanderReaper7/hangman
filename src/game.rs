@@ -1,4 +1,22 @@
+use zstd::stream::read::Decoder as ZstdDecoder;
+use std::io::Read;
+use lazy_static::lazy_static;
+
 pub const ENGLISH_ALPHABET: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+lazy_static! {
+    pub static ref ENGLISH_WORD_LIST: Vec<String> = {
+        const SOURCE: &[u8] = include_bytes!("../assets/english_word_list.txt.zst");
+        let mut decoder = ZstdDecoder::new(SOURCE).unwrap();
+        let mut out = String::new();
+        decoder.read_to_string(&mut out).unwrap();
+        out.lines().map(|s| s.to_string()).collect::<Vec<String>>()
+    };
+}
+pub fn is_word_in_dictionary(word: &str) -> bool {
+    ENGLISH_WORD_LIST.binary_search(&word.to_uppercase()).is_ok()
+}
+
+#[derive(Debug, Clone, Copy)]
 pub enum HangmanDrawingElements {
     Base = 1,
     VerticalBeam = 2,
@@ -18,6 +36,7 @@ pub enum HangmanDrawingElements {
 }
 use HangmanDrawingElements::*;
 /// the drawing element order and the different difficulty versions
+#[derive(Debug, Clone)]
 pub struct DifficultyLevel(pub Vec<HangmanDrawingElements>, &'static str);
 impl DifficultyLevel {
     pub fn get_easiest() -> DifficultyLevel {
@@ -131,7 +150,9 @@ impl Game {
                 return Err(());
             }
         }
-        // TODO: check if word is in the dictionary
+        if !is_word_in_dictionary(&word) {
+            return Err(());
+        }
         Ok(Game {
             guessable_characters: GuessableChar::new_set(ENGLISH_ALPHABET),
             guess_count: 0,
@@ -139,6 +160,9 @@ impl Game {
             word,
             difficulty,
         })
+    }
+    pub fn from_game(game: &Game, word: String) -> Result<Game, ()> {
+        Game::new(word, game.difficulty.clone())
     }
     /// checks if the character is in the word and fill it in, returns true if it was in the word
     pub fn guess(&mut self, char: char) -> Option<bool> {
@@ -186,6 +210,12 @@ impl Game {
 }
 impl Default for Game {
     fn default() -> Self {
-        Self::new("hangman".to_string(), DifficultyLevel::get_easiest()).unwrap()
+        Game {
+            guessable_characters: GuessableChar::new_set(ENGLISH_ALPHABET),
+            guess_count: 0,
+            in_progress_word: "".to_string(),
+            word: "".to_string(),
+            difficulty: DifficultyLevel::get_easiest(),
+        }
     }
 }

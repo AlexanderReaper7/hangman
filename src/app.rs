@@ -15,14 +15,11 @@ use piston::{Button, ButtonArgs, Key, ResizeArgs};
 use std::cmp::min;
 use std::time::Instant;
 
-struct Selecting;
-struct Guessing;
-struct GameOver(bool);
-
+#[derive(Debug, PartialEq)]
 pub enum AppState {
-    Selecting(Selecting),
-    Guessing(Guessing),
-    GameOver(GameOver),
+    Selecting,
+    Guessing,
+    GameOver(bool),
 }
 
 /// logical size of the window to help with positioning elements on the screen
@@ -50,17 +47,17 @@ pub struct App<'a> {
 }
 impl Default for App<'_> {
     fn default() -> App<'static> {
-        let game = Game::new("abc".to_string(), DifficultyLevel::get_hard()).unwrap();
+        let game = Game::default();
         let mut app = App {
             gl: GlGraphics::new(OpenGL::V3_2),
             previous_frame_instant: Instant::now(),
-            glyph_cache: GlyphCache::new(
-                "assets/courier-prime-code.regular.ttf",
+            glyph_cache: GlyphCache::from_bytes(
+                include_bytes!("../assets/courier-prime-code.regular.ttf"),
                 (),
                 TextureSettings::new(),
             )
             .unwrap(),
-            state: AppState::Guessing,
+            state: AppState::Selecting,
             mouse_position: [0.0, 0.0],
             window_size: [WINDOW_DOTS, WINDOW_DOTS],
             guessable_char_pos: vec![[0.0, 0.0]; game.guessable_characters.len()],
@@ -80,7 +77,10 @@ impl App<'_> {
             // center of window transform
             let center_anchor = c
                 .transform
-                .trans(args.window_size[0] / 2.0, args.window_size[1] / 2.0);            
+                .trans(args.window_size[0] / 2.0, args.window_size[1] / 2.0);
+            if self.state == AppState::Selecting {
+                //rendering::instructions(self, &center_anchor, FONT_SIZE).unwrap();
+            }
             rendering::in_progress_word(self, &center_anchor, FONT_SIZE).unwrap();
             rendering::guessable_characters(self, &c, FONT_SIZE).unwrap();
             rendering::hangman(self, &center_anchor, args).unwrap();
@@ -106,21 +106,32 @@ impl App<'_> {
     pub fn button(&mut self, args: &ButtonArgs) {
         match args.button {
             Button::Keyboard(key) => {
+                if args.state != piston::ButtonState::Press {
+                    return;
+                }
                 match self.state {
                     AppState::GameOver(_) => {
                         if key == Key::Space || key == Key::Return {
+                            self.game.in_progress_word = "".to_string();
                             self.state = AppState::Selecting;
                         }
                     },
                     AppState::Selecting => {
                         if key >= Key::A && key <= Key::Z {
                             let alphabet_index = key as usize - Key::A as usize;
-                            self.game
-                                .guess(self.game.guessable_characters[alphabet_index].0);
-                            if let Some(end_state) = self.game.get_game_state() {
-                                self.state = AppState::GameOver(end_state);
-                            }
-                        }                    },
+                            self.game.in_progress_word.push(self.game.guessable_characters[alphabet_index].0);
+                        }
+                        else if key == Key::Backspace {
+                            self.game.in_progress_word.pop();
+                        }
+                        else if key == Key::Return {
+                            self.game = match Game::from_game(&self.game, self.game.in_progress_word.clone()) {
+                                Ok(g) => g,
+                                Err(_) => return,
+                            };
+                            self.state = AppState::Guessing;
+                        }
+                    },
                     AppState::Guessing => {
                         if key >= Key::A && key <= Key::Z {
                             let alphabet_index = key as usize - Key::A as usize;
