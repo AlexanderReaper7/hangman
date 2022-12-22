@@ -35,7 +35,7 @@
 - [ ] P2P networking multiplayer
 - [ ] AI guesser
 - [ ] AI word picker by customizable difficulty level
-- [ ] compilable to WASM
+- [ ] ~~compilable to WASM~~ So, it turns out that piston does not like the web very much...
 - [ ] CLI version
 - [x] Word selection checking in dictionary
 

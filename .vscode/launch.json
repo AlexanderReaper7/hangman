@@ -7,15 +7,52 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'hangman'",
+            "name": "Debug executable 'piston_hangman'",
             "cargo": {
                 "args": [
                     "build",
-                    "--bin=hangman",
-                    "--package=hangman"
+                    "--bin=piston_hangman",
+                    "--package=piston_hangman"
                 ],
                 "filter": {
-                    "name": "hangman",
+                    "name": "piston_hangman",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'piston_hangman'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=piston_hangman",
+                    "--package=piston_hangman"
+                ],
+                "filter": {
+                    "name": "piston_hangman",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'bevy_hangman'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=bevy_hangman",
+                    "--package=bevy_hangman"
+                ],
+                "filter": {
+                    "name": "bevy_hangman",
                     "kind": "bin"
                 }
             },

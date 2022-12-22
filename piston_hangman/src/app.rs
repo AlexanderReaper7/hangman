@@ -52,7 +52,7 @@ impl Default for App<'_> {
             gl: GlGraphics::new(OpenGL::V3_2),
             previous_frame_instant: Instant::now(),
             glyph_cache: GlyphCache::from_bytes(
-                include_bytes!("../assets/courier-prime-code.regular.ttf"),
+                include_bytes!("../../assets/courier-prime-code.regular.ttf"),
                 (),
                 TextureSettings::new(),
             )

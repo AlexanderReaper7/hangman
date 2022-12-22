@@ -5,7 +5,7 @@ use lazy_static::lazy_static;
 pub const ENGLISH_ALPHABET: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 lazy_static! {
     pub static ref ENGLISH_WORD_LIST: Vec<String> = {
-        const SOURCE: &[u8] = include_bytes!("../assets/english_word_list.txt.zst");
+        const SOURCE: &[u8] = include_bytes!("../../assets/english_word_list.txt.zst");
         let mut decoder = ZstdDecoder::new(SOURCE).unwrap();
         let mut out = String::new();
         decoder.read_to_string(&mut out).unwrap();

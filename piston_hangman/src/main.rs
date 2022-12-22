@@ -14,7 +14,6 @@ use piston::input::{RenderEvent, UpdateEvent};
 use piston::window::WindowSettings;
 use piston::{EventLoop, ButtonEvent, ResizeEvent};
 
-
 fn main() {
     let opengl = OpenGL::V3_2;
 
